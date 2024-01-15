@@ -10,7 +10,7 @@
 
 class Swerve : public frc2::SubsystemBase {
  public:
-  SwerveModule modules[4];
+  std::vector<SwerveModule> modules;
 
   Swerve();
 
