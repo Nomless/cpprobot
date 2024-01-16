@@ -23,11 +23,11 @@ class TalonFXConversions {
   static units::revolutions_per_minute_t ToRpm(units::turns_per_second_t rps, double gear_ratio = 1);
   static units::turns_per_second_t ToFalcon(units::revolutions_per_minute_t rpm, double gear_ratio = 1);
 
-  static units::meters_per_second_t ToMetersPerSecond(units::turns_per_second_t rps, double circumference, double gear_ratio = 1);
-  static units::turns_per_second_t ToFalcon(units::meters_per_second_t velocity, double circumference, double gear_ratio = 1);
+  static units::meters_per_second_t ToMetersPerSecond(units::turns_per_second_t rps, units::meter_t circumference, double gear_ratio = 1);
+  static units::turns_per_second_t ToFalcon(units::meters_per_second_t velocity, units::meter_t circumference, double gear_ratio = 1);
 
-  static units::meter_t ToMeters(units::turn_t rotations, double circumference, double gear_ratio = 1);
-  static units::turn_t ToFalcon(units::meter_t meters, double circumference, double gear_ratio = 1);
+  static units::meter_t ToMeters(units::turn_t rotations, units::meter_t circumference, double gear_ratio = 1);
+  static units::turn_t ToFalcon(units::meter_t meters, units::meter_t circumference, double gear_ratio = 1);
 };
 
 namespace SparkMaxConversions {

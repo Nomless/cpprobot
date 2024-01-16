@@ -66,7 +66,7 @@ frc::SwerveModulePosition TalonFXSwerveModule::GetPosition() {
 }
 
 void TalonFXSwerveModule::SetAngle(frc::SwerveModuleState desired_state) {
-  frc::Rotation2d angle = (std::fabs(desired_state.speed.value()) <= SwerveConstants::kMaxSpeed * 0.01) ? last_angle : desired_state.angle;
+  frc::Rotation2d angle = (units::meters_per_second_t{std::fabs(desired_state.speed.value())} <= SwerveConstants::kMaxSpeed * 0.01) ? last_angle : desired_state.angle;
   ctre::phoenix6::controls::PositionVoltage control{TalonFXConversions::ToFalcon(angle.Degrees())};
   control.WithFeedForward(units::volt_t{SwerveConstants::kAngleF});
   angle_motor.SetControl(control);
@@ -76,7 +76,7 @@ void TalonFXSwerveModule::SetAngle(frc::SwerveModuleState desired_state) {
 
 void TalonFXSwerveModule::SetSpeed(frc::SwerveModuleState desired_state, bool is_open_loop) {
   if (is_open_loop) {
-    double percent_output = desired_state.speed.value() / SwerveConstants::kMaxSpeed;
+    double percent_output = desired_state.speed / SwerveConstants::kMaxSpeed;
     drive_motor.Set(percent_output);
   }
   else {
@@ -86,4 +86,9 @@ void TalonFXSwerveModule::SetSpeed(frc::SwerveModuleState desired_state, bool is
     control.WithFeedForward(units::volt_t{SwerveConstants::kDriveF});
     drive_motor.SetControl(control);
   }
+}
+
+void TalonFXSwerveModule::ResetToAbsolute() {
+  auto absolute_position = TalonFXConversions::ToFalcon(GetCanCoderAngle() - angle_offset.Degrees(), SwerveConstants::kAngleGearRatio);
+  angle_motor.SetPosition(units::turn_t{absolute_position});
 }

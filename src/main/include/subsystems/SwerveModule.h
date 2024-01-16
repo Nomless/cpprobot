@@ -18,6 +18,7 @@ class SwerveModule {
   int module_number;
 
   SwerveModule(int module_number, SwerveModuleConstants module_constants);
+  virtual ~SwerveModule();
 
   void SetDesiredState(frc::SwerveModuleState desired_state, bool is_open_loop);
   virtual void SetAngle(frc::SwerveModuleState desired_state);
@@ -35,7 +36,7 @@ class SwerveModule {
   frc::SwerveModuleState GetState();
   virtual frc::SwerveModulePosition GetPosition();
 
-  // void ResetToAbsolute();
+  virtual void ResetToAbsolute();
  protected:
   frc::Rotation2d angle_offset;
   frc::Rotation2d last_angle;

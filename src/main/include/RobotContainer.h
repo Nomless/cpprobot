@@ -4,11 +4,15 @@
 
 #pragma once
 
+#include <functional>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/InstantCommand.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/shuffleboard/Shuffleboard.h>
+#include <frc2/command/Command.h>
 
 #include "Constants.h"
-#include "subsystems/ExampleSubsystem.h"
 #include "subsystems/Swerve.h"
 
 /**
@@ -31,6 +35,10 @@ class RobotContainer {
 
   // The robot's subsystems are defined here...
   Swerve swerve;
+
+  // Drive Controls
+  frc::SendableChooser<std::function<frc2::CommandPtr()>> auto_chooser;
+  bool slow_enabled;
 
   void ConfigureBindings();
 };

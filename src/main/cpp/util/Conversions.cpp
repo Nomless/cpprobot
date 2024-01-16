@@ -28,19 +28,19 @@ units::turns_per_second_t TalonFXConversions::ToFalcon(units::revolutions_per_mi
   return units::turns_per_second_t{rpm} * gear_ratio;
 }
 
-units::meters_per_second_t TalonFXConversions::ToMetersPerSecond(units::turns_per_second_t rps, double circumference, double gear_ratio) {
-  return units::meters_per_second_t(ToRpm(rps, gear_ratio).value() * circumference / 60);
+units::meters_per_second_t TalonFXConversions::ToMetersPerSecond(units::turns_per_second_t rps, units::meter_t circumference, double gear_ratio) {
+  return units::meters_per_second_t(ToRpm(rps, gear_ratio).value() * circumference.value() / 60);
 }
 
-units::turns_per_second_t TalonFXConversions::ToFalcon(units::meters_per_second_t velocity, double circumference, double gear_ratio) {
-  auto rpm = units::revolutions_per_minute_t{(velocity.value() * 60) / circumference};
+units::turns_per_second_t TalonFXConversions::ToFalcon(units::meters_per_second_t velocity, units::meter_t circumference, double gear_ratio) {
+  auto rpm = units::revolutions_per_minute_t{(velocity.value() * 60) / circumference.value()};
   return ToFalcon(rpm, gear_ratio);
 }
 
-units::meter_t TalonFXConversions::ToMeters(units::turn_t rotations, double circumference, double gear_ratio) {
-  return units::meter_t{rotations.value() * circumference / gear_ratio};
+units::meter_t TalonFXConversions::ToMeters(units::turn_t rotations, units::meter_t circumference, double gear_ratio) {
+  return units::meter_t{rotations.value() * circumference.value() / gear_ratio};
 }
 
-units::turn_t TalonFXConversions::ToFalcon(units::meter_t meters, double circumference, double gear_ratio) {
-  return units::turn_t{meters.value() / circumference * gear_ratio};
+units::turn_t TalonFXConversions::ToFalcon(units::meter_t meters, units::meter_t circumference, double gear_ratio) {
+  return units::turn_t{meters.value() / circumference.value() * gear_ratio};
 }

@@ -21,6 +21,8 @@ SwerveModule::SwerveModule(int module_number, SwerveModuleConstants module_const
   last_angle = GetState().angle;
 }
 
+SwerveModule::~SwerveModule() {}
+
 void SwerveModule::ConfigAngleEncoder() {
   auto can_coder_config = ctre::phoenix6::configs::CANcoderConfiguration{};
   can_coder_config.MagnetSensor.WithAbsoluteSensorRange(ctre::phoenix6::signals::AbsoluteSensorRangeValue::Unsigned_0To1);
@@ -68,6 +70,8 @@ void SwerveModule::SetDesiredState(frc::SwerveModuleState desired_state, bool is
   SetAngle(desired_state);
   SetSpeed(desired_state, is_open_loop);
 }
+
+void SwerveModule::ResetToAbsolute() {}
 
 frc::SwerveModuleState SwerveModule::Optimize(frc::SwerveModuleState desired_state, frc::Rotation2d current_angle) {
   auto target_angle = PlaceInAppropriate0To360Scope(current_angle.Degrees(), desired_state.angle.Degrees());

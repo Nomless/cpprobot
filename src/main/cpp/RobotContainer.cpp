@@ -4,32 +4,31 @@
 
 #include "RobotContainer.h"
 
-#include <frc2/command/button/Trigger.h>
+#include <commands/TeleopSwerve.h>
 
-#include "commands/ExampleCommand.h"
-#include <autos/AutoTest.h>
-
-RobotContainer::RobotContainer() : swerve() {
+RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
+
+  slow_enabled = false;
 
   // Configure the button bindings
   ConfigureBindings();
+
+  // Autos
+  auto_chooser.AddOption("nothing", [this] { return frc2::InstantCommand([this] {}).ToPtr(); });
+  frc::Shuffleboard::GetTab("Auto").Add(auto_chooser);
 }
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
-
-  // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-  // frc2::Trigger([this] {
-  //   return m_subsystem.ExampleCondition();
-  // }).OnTrue(ExampleCommand(&m_subsystem).ToPtr());
-
-  // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
-  // pressed, cancelling on release.
-  // m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
-  
+  swerve.SetDefaultCommand(TeleopSwerve(
+    &swerve,
+    [this] { return this->xbox.GetLeftY() * (this->slow_enabled ? 0.5 : 1) * 0.8; },
+    [this] { return this->xbox.GetLeftX() * (this->slow_enabled ? 0.5 : 1) * 0.8; },
+    [this] { return this->xbox.GetRightX() * (this->slow_enabled ? 0.5 : 1) * 0.6; }
+  ));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  return AutoTest(swerve).ToPtr();
+  return auto_chooser.GetSelected()();
 }

@@ -11,19 +11,21 @@
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include "util/SwerveModuleConstants.h"
 #include <ctre/phoenix6/signals/SpnEnums.hpp>
+#include <frc/kinematics/SwerveDriveKinematics.h>
 
 namespace OperatorConstants {
 
 inline constexpr int kDriverControllerPort = 0;
+inline constexpr double kStickDeadband = 0.1;
 
 }  // namespace OperatorConstants
 
 namespace SwerveConstants {
 
 /* Drivetrain Constants */
-inline constexpr double kTrackWidth = 0.5461; 
-inline constexpr double kWheelBase = 0.5461; 
-inline constexpr double kWheelCircumference = units::meter_t(4_in).value(); 
+inline constexpr units::meter_t kTrackWidth = 0.5461_m; 
+inline constexpr units::meter_t kWheelBase = 0.5461_m; 
+inline constexpr units::meter_t kWheelCircumference = units::meter_t(4_in);
 
 /* Module Gear Ratios */
 inline constexpr double kAngleGearRatio = ((150.0 / 7.0) / 1.0);
@@ -63,8 +65,8 @@ inline constexpr double kDriveF = 0;
 // inline constexpr auto kDriveA = 0.24541_V * 1_m / 1_s / 1_s;
 
 /* Swerve Profiling Values */
-inline constexpr double kMaxSpeed = 2;
-inline constexpr double kMaxAngularSpeed = 4;
+inline constexpr units::meters_per_second_t kMaxSpeed = 2_mps;
+inline constexpr units::radians_per_second_t kMaxAngularSpeed = 4_rad_per_s;
 
 /* Idle Modes */
 inline constexpr auto kDriveIdleMode = rev::CANSparkMax::IdleMode::kBrake;

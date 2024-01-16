@@ -72,7 +72,7 @@ frc::SwerveModulePosition SparkMaxSwerveModule::GetPosition() {
 }
 
 void SparkMaxSwerveModule::SetAngle(frc::SwerveModuleState desired_state) {
-  frc::Rotation2d angle = (std::fabs(desired_state.speed.value()) <= SwerveConstants::kMaxSpeed * 0.01) ? last_angle : desired_state.angle;
+  frc::Rotation2d angle = (units::meters_per_second_t{std::fabs(desired_state.speed.value())} <= SwerveConstants::kMaxSpeed * 0.01) ? last_angle : desired_state.angle;
 
   angle_controller.SetReference(angle.Degrees().value(), rev::CANSparkMax::ControlType::kPosition);
   last_angle = angle;
@@ -80,11 +80,17 @@ void SparkMaxSwerveModule::SetAngle(frc::SwerveModuleState desired_state) {
 
 void SparkMaxSwerveModule::SetSpeed(frc::SwerveModuleState desired_state, bool is_open_loop) {
   if (is_open_loop) {
-    double percent_output = desired_state.speed.value() / SwerveConstants::kMaxSpeed;
+    double percent_output = desired_state.speed / SwerveConstants::kMaxSpeed;
     drive_motor.Set(percent_output);
   }
   else {
     double velocity = desired_state.speed.value();
     drive_controller.SetReference(velocity, rev::CANSparkMax::ControlType::kVelocity);
   }
+}
+
+// TODO: to be implemented
+void SparkMaxSwerveModule::ResetToAbsolute() {
+  // auto absolute_position = TalonFXConversions::ToFalcon(GetCanCoderAngle() - angle_offset.Degrees(), SwerveConstants::kAngleGearRatio);
+  // angle_motor.SetPosition(units::turn_t{absolute_position});
 }
