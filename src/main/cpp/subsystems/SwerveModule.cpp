@@ -14,8 +14,8 @@ SwerveModule::SwerveModule(int module_number, SwerveModuleConstants module_const
     module_number(module_number), 
     angle_offset(module_constants.angle_offset),
     last_angle(module_constants.angle_offset),
-    angle_encoder{module_constants.cancoder_id} {
-    // feedforward{SwerveConstants::kDriveS, SwerveConstants::kDriveV, SwerveConstants::kDriveA} {
+    angle_encoder{module_constants.cancoder_id},
+    feedforward{SwerveConstants::kDriveS, SwerveConstants::kDriveV, SwerveConstants::kDriveA} {
   ConfigAngleEncoder();
 
   last_angle = GetState().angle;
@@ -26,7 +26,6 @@ SwerveModule::~SwerveModule() {}
 void SwerveModule::ConfigAngleEncoder() {
   auto can_coder_config = ctre::phoenix6::configs::CANcoderConfiguration{};
   can_coder_config.MagnetSensor.WithAbsoluteSensorRange(ctre::phoenix6::signals::AbsoluteSensorRangeValue::Unsigned_0To1);
-  // manget_config.WithSensorDirection(ctre::phoenix6::signals::SensorDirectionValue::Clockwise_Positive);
   angle_encoder.GetConfigurator().Apply(can_coder_config);
 }
 

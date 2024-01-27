@@ -60,21 +60,19 @@ inline constexpr double kDriveD = 0;
 inline constexpr double kDriveF = 0;
 
 /* Drive Motor Characterization */
-// inline constexpr auto kDriveS = 0.13126_V;
-// inline constexpr auto kDriveV = 2.6745_V * 1_m / 1_s;
-// inline constexpr auto kDriveA = 0.24541_V * 1_m / 1_s / 1_s;
+inline constexpr auto kDriveS = 0.13126_V;
+inline constexpr auto kDriveV = 2.6745 * 1_V / 1_m * 1_s;
+inline constexpr auto kDriveA = 0.24541 * 1_V / 1_m * 1_s * 1_s;
 
 /* Swerve Profiling Values */
 inline constexpr units::meters_per_second_t kMaxSpeed = 2_mps;
 inline constexpr units::radians_per_second_t kMaxAngularSpeed = 4_rad_per_s;
 
-/* Idle Modes */
-inline constexpr auto kDriveIdleMode = rev::CANSparkMax::IdleMode::kBrake;
-inline constexpr auto kAngleIdleMode = rev::CANSparkMax::IdleMode::kBrake;
-
-/* Neutral Modes */
+/* Neutral and Idle Modes */
 inline constexpr auto kDriveNeutralMode = ctre::phoenix6::signals::NeutralModeValue::Brake;
 inline constexpr auto kAngleNeutralMode = ctre::phoenix6::signals::NeutralModeValue::Brake;
+inline constexpr auto kDriveIdleMode = rev::CANSparkMax::IdleMode::kBrake;
+inline constexpr auto kAngleIdleMode = rev::CANSparkMax::IdleMode::kBrake;
 
 /* Module Specific Constants */
 /* Front Left Module - Module 0 */

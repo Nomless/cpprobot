@@ -42,7 +42,7 @@ class SwerveModule {
   frc::Rotation2d last_angle;
   ctre::phoenix6::hardware::CANcoder angle_encoder;
 
-  // frc::SimpleMotorFeedforward<units::meters> feedforward;
+  frc::SimpleMotorFeedforward<units::meters> feedforward;
 
   void ConfigAngleEncoder();
 
