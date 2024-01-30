@@ -20,34 +20,34 @@ class TalonFXSwerveAngleMotor : public SwerveAngleMotor {
    * Runs a motor with percent ouput/duty cycle
    * @param speed Percent ouput [-1, 1]
    */
-  void Set(double speed);
+  inline void Set(double speed) override;
 
   /**
    * Sets the target position of the mechanism in rotations
    * @param rotations Target position in rotations
    */
-  void SetPosition(units::turn_t rotations);
+  inline void SetPosition(units::turn_t rotations) override;
 
   /**
    * Sets the position that the sensor reads
    * @param rotations Position in rotations
    */
-  void SetSensorPosition(units::turn_t rotations);
+  void SetSensorPosition(units::turn_t rotations) override;
 
   /**
    * Get the position of the motor in rotations
    * @return Position in rotations
    */
-  units::turn_t GetPosition();
+  inline units::turn_t GetPosition() override;
 
   /**
    * Configure the motor settings
    */
-  void Config();
+  void Config() override;
 
   /**
    * Get the underlying motor controller wrapped by this class
    * @return The motor controller
    */
-  ctre::phoenix6::hardware::TalonFX* GetMotor();
+  ctre::phoenix6::hardware::TalonFX* GetMotor() override;
 };

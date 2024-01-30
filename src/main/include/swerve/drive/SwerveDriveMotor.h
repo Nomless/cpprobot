@@ -11,23 +11,21 @@
 
 class SwerveDriveMotor {
  public:
-  SwerveDriveMotor();
-  
-  void Set(double speed);
+  virtual void Set(double speed) = 0;
 
-  void SetVelocity(units::revolutions_per_minute_t rpm);
+  virtual void SetVelocity(units::revolutions_per_minute_t rpm) = 0;
 
-  void SetLinearVelocity(units::meters_per_second_t mps, double feedforward = 0);
+  virtual void SetLinearVelocity(units::meters_per_second_t mps, double feedforward = 0) = 0;
 
-  units::revolutions_per_minute_t GetVelocity();
+  virtual units::revolutions_per_minute_t GetVelocity() = 0;
 
-  units::meters_per_second_t GetLinearVelocity();
+  virtual units::meters_per_second_t GetLinearVelocity() = 0;
 
-  units::turn_t GetPosition();
+  virtual units::turn_t GetPosition() = 0;
 
-  units::meter_t GetDisplacement();
+  virtual units::meter_t GetDisplacement() = 0;
 
-  void Config();
+  virtual void Config() = 0;
 
-  frc::MotorController GetMotor();
+  virtual frc::MotorController* GetMotor() = 0;
 };

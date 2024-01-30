@@ -9,40 +9,38 @@
 
 class SwerveAngleMotor {
  public:
-  SwerveAngleMotor();
-
   /**
    * Runs a motor with percent ouput/duty cycle
    * @param speed Percent ouput [-1, 1]
    */
-  void Set(double speed);
+  virtual void Set(double speed) = 0;
 
   /**
    * Sets the target position of the mechanism in rotations
    * @param rotations Target position in rotations
    */
-  void SetPosition(units::turn_t rotations);
+  virtual void SetPosition(units::turn_t rotations) = 0;
 
   /**
    * Sets the position that the sensor reads
    * @param rotations Position in rotations
    */
-  void SetSensorPosition(units::turn_t rotations);
+  virtual void SetSensorPosition(units::turn_t rotations) = 0;
 
   /**
    * Get the position of the motor in rotations
    * @return Position in rotations
    */
-  units::turn_t GetPosition();
+  virtual units::turn_t GetPosition() = 0;
 
   /**
    * Configure the motor settings
    */
-  void Config();
+  virtual void Config() = 0;
 
   /**
    * Get the underlying motor controller wrapped by this class
    * @return The motor controller
    */
-  frc::MotorController* GetMotor();
+  virtual frc::MotorController* GetMotor() = 0;
 };
