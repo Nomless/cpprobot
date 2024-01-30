@@ -5,8 +5,7 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <subsystems/SwerveModule.h>
-#include <subsystems/TalonFXSwerveModule.h>
+#include <swerve/SwerveModule.h>
 #include "rev/CANSparkMax.h"
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>

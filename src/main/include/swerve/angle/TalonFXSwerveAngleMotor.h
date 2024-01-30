@@ -15,6 +15,7 @@ class TalonFXSwerveAngleMotor : public SwerveAngleMotor {
 
  public:
   TalonFXSwerveAngleMotor(int can_id);
+  ~TalonFXSwerveAngleMotor();
 
   /**
    * Runs a motor with percent ouput/duty cycle

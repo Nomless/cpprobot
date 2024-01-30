@@ -4,43 +4,18 @@
 
 #include "util/Conversions.h"
 
-units::degree_t CanCoderConversions::ToDegrees(units::turn_t can_coder, double gear_ratio) {
-  return units::degree_t{can_coder} / gear_ratio;
+units::meters_per_second_t Conversions::RPSToMPS(units::turns_per_second_t rps, units::meter_t circumference) {
+  return units::meters_per_second_t{rps.value() * circumference.value()};
 }
 
-units::turn_t CanCoderConversions::ToCanCoder(units::degree_t degrees, double gear_ratio) {
-  return units::turn_t{degrees} / gear_ratio;
+units::turns_per_second_t Conversions::MPSToRPS(units::meters_per_second_t velocity, units::meter_t circumference) {
+  return units::turns_per_second_t{velocity.value() / circumference.value()};
 }
 
-units::degree_t TalonFXConversions::ToDegrees(units::turn_t rotations, double gear_ratio) {
-  return units::degree_t{rotations} / gear_ratio;
+units::meter_t Conversions::RotationsToMeters(units::turn_t rotations, units::meter_t circumference) {
+  return units::meter_t{rotations.value() * circumference.value()};
 }
 
-units::turn_t TalonFXConversions::ToFalcon(units::degree_t degrees, double gear_ratio) {
-  return units::turn_t{degrees} * gear_ratio;
-}
-
-units::revolutions_per_minute_t TalonFXConversions::ToRpm(units::turns_per_second_t rps, double gear_ratio) {
-  return units::revolutions_per_minute_t{rps} / gear_ratio;
-}
-
-units::turns_per_second_t TalonFXConversions::ToFalcon(units::revolutions_per_minute_t rpm, double gear_ratio) {
-  return units::turns_per_second_t{rpm} * gear_ratio;
-}
-
-units::meters_per_second_t TalonFXConversions::ToMetersPerSecond(units::turns_per_second_t rps, units::meter_t circumference, double gear_ratio) {
-  return units::meters_per_second_t(ToRpm(rps, gear_ratio).value() * circumference.value() / 60);
-}
-
-units::turns_per_second_t TalonFXConversions::ToFalcon(units::meters_per_second_t velocity, units::meter_t circumference, double gear_ratio) {
-  auto rpm = units::revolutions_per_minute_t{(velocity.value() * 60) / circumference.value()};
-  return ToFalcon(rpm, gear_ratio);
-}
-
-units::meter_t TalonFXConversions::ToMeters(units::turn_t rotations, units::meter_t circumference, double gear_ratio) {
-  return units::meter_t{rotations.value() * circumference.value() / gear_ratio};
-}
-
-units::turn_t TalonFXConversions::ToFalcon(units::meter_t meters, units::meter_t circumference, double gear_ratio) {
-  return units::turn_t{meters.value() / circumference.value() * gear_ratio};
+units::turn_t Conversions::MetersToRotations(units::meter_t meters, units::meter_t circumference) {
+  return units::turn_t{meters.value() / circumference.value()};
 }

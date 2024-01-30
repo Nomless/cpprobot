@@ -3,9 +3,10 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/Swerve.h"
-#include <subsystems/TalonFXSwerveModule.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <Constants.h>
+#include <swerve/angle/TalonFXSwerveAngleMotor.h>
+#include <swerve/drive/TalonFXSwerveDriveMotor.h>
 
 Swerve::Swerve() : 
     gyro{frc::SerialPort::kMXP},
@@ -20,10 +21,10 @@ Swerve::Swerve() :
     limiter_x{6_mps},
     limiter_y{6_mps} {
   modules = {
-    new TalonFXSwerveModule(0, SwerveConstants::Mod0::kModule),
-    new TalonFXSwerveModule(1, SwerveConstants::Mod1::kModule),
-    new TalonFXSwerveModule(2, SwerveConstants::Mod2::kModule),
-    new TalonFXSwerveModule(3, SwerveConstants::Mod3::kModule),
+    new SwerveModule(0, new TalonFXSwerveAngleMotor(SwerveConstants::Mod0::kModule.angle_motor_id), new TalonFXSwerveDriveMotor(SwerveConstants::Mod0::kModule.drive_motor_id), SwerveConstants::Mod0::kModule),
+    new SwerveModule(1, new TalonFXSwerveAngleMotor(SwerveConstants::Mod1::kModule.angle_motor_id), new TalonFXSwerveDriveMotor(SwerveConstants::Mod1::kModule.drive_motor_id), SwerveConstants::Mod1::kModule),
+    new SwerveModule(2, new TalonFXSwerveAngleMotor(SwerveConstants::Mod2::kModule.angle_motor_id), new TalonFXSwerveDriveMotor(SwerveConstants::Mod2::kModule.drive_motor_id), SwerveConstants::Mod2::kModule),
+    new SwerveModule(3, new TalonFXSwerveAngleMotor(SwerveConstants::Mod3::kModule.angle_motor_id), new TalonFXSwerveDriveMotor(SwerveConstants::Mod3::kModule.drive_motor_id), SwerveConstants::Mod3::kModule),
   };
   ResetModulesToAbsolute();
   ZeroGyro();

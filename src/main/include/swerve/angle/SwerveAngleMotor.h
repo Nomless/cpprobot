@@ -9,6 +9,8 @@
 
 class SwerveAngleMotor {
  public:
+  virtual ~SwerveAngleMotor();
+
   /**
    * Runs a motor with percent ouput/duty cycle
    * @param speed Percent ouput [-1, 1]

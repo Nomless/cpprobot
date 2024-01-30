@@ -8,6 +8,8 @@ TalonFXSwerveAngleMotor::TalonFXSwerveAngleMotor(int can_id) :
     motor(can_id),
     control(0_tr) {}
 
+TalonFXSwerveAngleMotor::~TalonFXSwerveAngleMotor() {}
+
 inline void TalonFXSwerveAngleMotor::Set(double speed) {
   motor.Set(speed);
 }

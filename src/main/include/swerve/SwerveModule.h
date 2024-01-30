@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <functional>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/kinematics/SwerveModulePosition.h>
@@ -12,35 +13,41 @@
 #include <ctre/phoenix6/CANcoder.hpp>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include "rev/SparkRelativeEncoder.h"
+#include "swerve/angle/SwerveAngleMotor.h"
+#include "swerve/drive/SwerveDriveMotor.h"
 
 class SwerveModule {
  public:
   int module_number;
 
-  SwerveModule(int module_number, SwerveModuleConstants module_constants);
-  virtual ~SwerveModule();
+  SwerveModule(int module_number, SwerveAngleMotor* angle_motor, SwerveDriveMotor* drive_motor, SwerveModuleConstants module_constants);
+  ~SwerveModule();
 
   void SetDesiredState(frc::SwerveModuleState desired_state, bool is_open_loop);
-  virtual void SetAngle(frc::SwerveModuleState desired_state);
-  // virtual void SetAngle(units::degrees angle);
-  virtual void SetSpeed(frc::SwerveModuleState desired_state, bool is_open_loop);
-  // virtual void SetSpeed(units::meters_per_second_t velcity, bool is_open_loop);
+  void SetAngle(frc::SwerveModuleState desired_state);
+  void SetSpeed(frc::SwerveModuleState desired_state, bool is_open_loop);
 
   units::degree_t GetCanCoderAngle();
   frc::Rotation2d GetCanCoder();
 
-  virtual frc::Rotation2d GetAngle();
+  frc::Rotation2d GetAngle();
   frc::Rotation2d GetAngleSetpoint();
-  virtual units::meters_per_second_t GetVelocity();
+  units::meters_per_second_t GetVelocity();
 
   frc::SwerveModuleState GetState();
-  virtual frc::SwerveModulePosition GetPosition();
+  frc::SwerveModulePosition GetPosition();
 
-  virtual void ResetToAbsolute();
- protected:
+  SwerveAngleMotor* GetAngleMotor();
+  SwerveDriveMotor* GetDriveMotor();
+
+  void ResetToAbsolute();
+ private:
   frc::Rotation2d angle_offset;
   frc::Rotation2d last_angle;
+
   ctre::phoenix6::hardware::CANcoder angle_encoder;
+  SwerveAngleMotor* angle_motor;
+  SwerveDriveMotor* drive_motor;
 
   frc::SimpleMotorFeedforward<units::meters> feedforward;
 

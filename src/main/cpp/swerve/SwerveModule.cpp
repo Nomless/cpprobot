@@ -3,25 +3,30 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include <cmath>
-#include "subsystems/SwerveModule.h"
+#include "swerve/SwerveModule.h"
 #include <ctre/phoenix6/CANcoder.hpp>
 #include <ctre/phoenix6/configs/Configs.hpp>
 #include "Constants.h"
 #include <util/Conversions.h>
 #include <units/velocity.h>
 
-SwerveModule::SwerveModule(int module_number, SwerveModuleConstants module_constants) : 
+SwerveModule::SwerveModule(int module_number, SwerveAngleMotor* angle_motor, SwerveDriveMotor* drive_motor, SwerveModuleConstants module_constants) : 
     module_number(module_number), 
     angle_offset(module_constants.angle_offset),
     last_angle(module_constants.angle_offset),
     angle_encoder{module_constants.cancoder_id},
+    angle_motor(angle_motor),
+    drive_motor(drive_motor),
     feedforward{SwerveConstants::kDriveS, SwerveConstants::kDriveV, SwerveConstants::kDriveA} {
   ConfigAngleEncoder();
 
   last_angle = GetState().angle;
 }
 
-SwerveModule::~SwerveModule() {}
+SwerveModule::~SwerveModule() {
+  delete angle_motor;
+  delete drive_motor;
+}
 
 void SwerveModule::ConfigAngleEncoder() {
   auto can_coder_config = ctre::phoenix6::configs::CANcoderConfiguration{};
@@ -30,7 +35,7 @@ void SwerveModule::ConfigAngleEncoder() {
 }
 
 units::degree_t SwerveModule::GetCanCoderAngle() {
-  return CanCoderConversions::ToDegrees(angle_encoder.GetAbsolutePosition().GetValue());
+  return angle_encoder.GetAbsolutePosition().GetValue();
 }
 
 frc::Rotation2d SwerveModule::GetCanCoder() {
