@@ -40,8 +40,13 @@ inline constexpr bool kInvertCanCoder = false;
 /* Current Limiting */
 inline constexpr int kAngleContinuousCurrentLimit = 40;
 inline constexpr int kAnglePeakCurrentLimit = 60;
+inline constexpr double kAnglePeakCurrentDuration = 0.1;
+inline constexpr bool kAngleEnableCurrentLimit = true;
+
 inline constexpr int kDriveContinuousCurrentLimit = 40;
 inline constexpr int kDrivePeakCurrentLimit = 60;
+inline constexpr double kDrivePeakCurrentDuration = 0.1;
+inline constexpr bool kDriveEnableCurrentLimit = true;
 
 /* Ramping */
 inline constexpr double kOpenLoopRamp = 0.25;

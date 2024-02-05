@@ -43,7 +43,23 @@ units::meter_t TalonFXSwerveDriveMotor::GetDisplacement() {
 }
 
 void TalonFXSwerveDriveMotor::Config() {
+  ctre::phoenix6::configs::TalonFXConfiguration config;
+  config.CurrentLimits
+      .WithSupplyCurrentLimitEnable(SwerveConstants::kDriveEnableCurrentLimit)
+      .WithSupplyCurrentLimit(SwerveConstants::kDriveContinuousCurrentLimit)
+      .WithSupplyCurrentThreshold(SwerveConstants::kDrivePeakCurrentLimit)
+      .WithSupplyTimeThreshold(SwerveConstants::kDrivePeakCurrentDuration);
 
+  config.Slot0.kP = SwerveConstants::kDriveP;
+  config.Slot0.kI = SwerveConstants::kDriveI;
+  config.Slot0.kD = SwerveConstants::kDriveD;
+
+  config.MotorOutput.NeutralMode = SwerveConstants::kDriveNeutralMode;
+  config.Feedback.SensorToMechanismRatio = SwerveConstants::kDriveGearRatio;
+  
+  config.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = SwerveConstants::kOpenLoopRamp;
+  config.ClosedLoopRamps.VoltageClosedLoopRampPeriod = SwerveConstants::kClosedLoopRamp;
+  motor.GetConfigurator().Apply(config);
 }
 
 ctre::phoenix6::hardware::TalonFX* TalonFXSwerveDriveMotor::GetMotor() {

@@ -70,7 +70,8 @@
     "optional": "cpp",
     "semaphore": "cpp",
     "stop_token": "cpp",
-    "thread": "cpp"
+    "thread": "cpp",
+    "future": "cpp"
   },
   "editor.tabSize": 2
 }

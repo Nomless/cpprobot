@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "swerve/angle/TalonFXSwerveAngleMotor.h"
+#include <Constants.h>
 
 TalonFXSwerveAngleMotor::TalonFXSwerveAngleMotor(int can_id) : 
     motor(can_id),
@@ -27,7 +28,21 @@ units::turn_t TalonFXSwerveAngleMotor::GetPosition() {
 }
 
 void TalonFXSwerveAngleMotor::Config() {
+  ctre::phoenix6::configs::TalonFXConfiguration config;
+  config.CurrentLimits
+      .WithSupplyCurrentLimitEnable(SwerveConstants::kAngleEnableCurrentLimit)
+      .WithSupplyCurrentLimit(SwerveConstants::kAngleContinuousCurrentLimit)
+      .WithSupplyCurrentThreshold(SwerveConstants::kAnglePeakCurrentLimit)
+      .WithSupplyTimeThreshold(SwerveConstants::kAnglePeakCurrentDuration);
 
+  config.Slot0.kP = SwerveConstants::kAngleP;
+  config.Slot0.kI = SwerveConstants::kAngleI;
+  config.Slot0.kD = SwerveConstants::kAngleD;
+
+  config.MotorOutput.NeutralMode = SwerveConstants::kAngleNeutralMode;
+  config.Feedback.SensorToMechanismRatio = SwerveConstants::kAngleGearRatio;
+  
+  motor.GetConfigurator().Apply(config);
 }
 
 ctre::phoenix6::hardware::TalonFX* TalonFXSwerveAngleMotor::GetMotor() {

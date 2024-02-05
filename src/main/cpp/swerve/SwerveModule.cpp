@@ -9,6 +9,7 @@
 #include "Constants.h"
 #include <util/Conversions.h>
 #include <units/velocity.h>
+#include <swerve/drive/TalonFXSwerveDriveMotor.h>
 
 SwerveModule::SwerveModule(int module_number, SwerveAngleMotor* angle_motor, SwerveDriveMotor* drive_motor, SwerveModuleConstants module_constants) : 
     module_number(module_number), 
@@ -19,6 +20,10 @@ SwerveModule::SwerveModule(int module_number, SwerveAngleMotor* angle_motor, Swe
     drive_motor(drive_motor),
     feedforward{SwerveConstants::kDriveS, SwerveConstants::kDriveV, SwerveConstants::kDriveA} {
   ConfigAngleEncoder();
+  angle_motor->Config();
+  drive_motor->Config();
+
+  ResetToAbsolute();
 
   last_angle = GetState().angle;
 }
@@ -43,7 +48,7 @@ frc::Rotation2d SwerveModule::GetCanCoder() {
 }
 
 frc::Rotation2d SwerveModule::GetAngle() {
-  return frc::Rotation2d{};
+  return frc::Rotation2d{units::degree_t{angle_motor->GetPosition()}};
 }
 
 frc::Rotation2d SwerveModule::GetAngleSetpoint() {
@@ -51,7 +56,7 @@ frc::Rotation2d SwerveModule::GetAngleSetpoint() {
 }
 
 units::meters_per_second_t SwerveModule::GetVelocity() {
-  return 0_mps;
+  return drive_motor->GetLinearVelocity();
 }
 
 frc::SwerveModuleState SwerveModule::GetState() {
@@ -62,12 +67,25 @@ frc::SwerveModuleState SwerveModule::GetState() {
 }
 
 frc::SwerveModulePosition SwerveModule::GetPosition() {
-  return frc::SwerveModulePosition{};
+  return frc::SwerveModulePosition{
+    drive_motor->GetDisplacement(),
+    GetAngle()
+  };
 }
 
-void SwerveModule::SetAngle(frc::SwerveModuleState desired_state) {}
+void SwerveModule::SetAngle(frc::SwerveModuleState desired_state) {
+  angle_motor->SetPosition(desired_state.angle.Degrees());
+}
 
-void SwerveModule::SetSpeed(frc::SwerveModuleState desired_state, bool is_open_loop) {}
+void SwerveModule::SetSpeed(frc::SwerveModuleState desired_state, bool is_open_loop) {
+  if (is_open_loop) {
+    auto out = desired_state.speed / SwerveConstants::kMaxSpeed;
+    drive_motor->Set(out.value());
+  }
+  else {
+    drive_motor->SetLinearVelocity(desired_state.speed, feedforward.Calculate(desired_state.speed));
+  }
+}
 
 void SwerveModule::SetDesiredState(frc::SwerveModuleState desired_state, bool is_open_loop) {
   desired_state = SwerveModule::Optimize(desired_state, GetAngle());
@@ -75,7 +93,10 @@ void SwerveModule::SetDesiredState(frc::SwerveModuleState desired_state, bool is
   SetSpeed(desired_state, is_open_loop);
 }
 
-void SwerveModule::ResetToAbsolute() {}
+void SwerveModule::ResetToAbsolute() {
+  auto absolute_position = GetCanCoderAngle() - angle_offset.Degrees();
+  angle_motor->SetSensorPosition(absolute_position);
+}
 
 frc::SwerveModuleState SwerveModule::Optimize(frc::SwerveModuleState desired_state, frc::Rotation2d current_angle) {
   auto target_angle = PlaceInAppropriate0To360Scope(current_angle.Degrees(), desired_state.angle.Degrees());
